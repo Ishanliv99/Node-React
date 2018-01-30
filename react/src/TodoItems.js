@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Tags from './Tags';
 
 class TodoItems extends Component {
   constructor() {
@@ -10,9 +11,10 @@ class TodoItems extends Component {
   createTasks(item,index) {
     return (
       <li key={index}>
-      {item.name}
-      <button onClick={() => this.delete(item.id)}>Delete</button>
-      <button onClick={() => this.edit(item.id)}>Edit</button>
+        {item.name}
+        <button onClick={() => this.delete(item.id)}>Delete</button>
+        <button onClick={() => this.edit(item.id)}>Edit</button>
+        <Tags tags={item.tags} />
       </li>
     )
   }
@@ -26,8 +28,8 @@ class TodoItems extends Component {
   }
 
   render() {
-    var todoEntries = this.props.entries;
-    var listItems = todoEntries.map(this.createTasks);
+    let todoEntries = this.props.items;
+    let listItems = todoEntries.map(this.createTasks);
 
     return (
       <ul className="theList">

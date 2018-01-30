@@ -13,26 +13,27 @@ export function seed(knex, Promise) {
       return Promise.all([
         // Inserts seed entries
         knex('tags').insert({
-          tag_name: 'person'
+          tag_name: 'call'
         }),
         knex('tags').insert({
-          tag_name: 'nature'
+          tag_name: 'clean'
         }),
         knex('tags').insert({
-          tag_name: 'vehicle'
+          tag_name: 'grocery'
         }),
         knex('tags').insert({
-          tag_name: 'building'
+          tag_name: 'meeting'
         }),
         knex('tags').insert({
-          tag_name: 'food'
+          tag_name: 'shows'
         }),
         knex('tags').insert({
-          tag_name: 'all'
+          tag_name: 'sports'
         }),
         knex('tags').insert({
-          tag_name: 'gadgets'
+          tag_name: 'work'
         })
       ]);
     });
-}
+  }
+  

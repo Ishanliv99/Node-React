@@ -8,6 +8,7 @@ class TodoList extends Component{
     super();
     this.state = {
       items: [],
+      tags: [],
       newTodo: "",
       editedItemid: 0,
       isEditable: 1
@@ -17,6 +18,7 @@ class TodoList extends Component{
     this.deleteItem = this.deleteItem.bind(this);
     this.editItem = this.editItem.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.tags = this.tags.bind(this);
   }
 
   handleChange(e) {
@@ -24,9 +26,19 @@ class TodoList extends Component{
   }
 
   componentDidMount(){
-    axios.get('http://127.0.0.1:8848/api/todos').then(res => {
+    axios.get('http://127.0.0.1:8848/api/todos')
+    .then(res => {
+      // console.log(res);
       this.setState({
         items: res.data.data
+      });
+    }).catch(err => err);
+
+    axios.get('http://127.0.0.1:8848/api/tags')
+    .then(res => {
+      // console.log(res);
+      this.setState({
+        tags: res.data.data
       });
     }).catch(err => err);
   }
@@ -38,13 +50,18 @@ class TodoList extends Component{
         axios.post('http://127.0.0.1:8848/api/todos',{
           name : this.state.newTodo,
           // done : 'yes',
-          userId: 1
+          userId: 1,
+          tags: [1,2,3]
         }).then(res => {
 
           itemArray.unshift({
             name: this.state.newTodo,
             userId: 1,
-            id: res.data.todoData.id
+            id: res.data.todoData.id,
+            tags: [{
+              id: 1,
+              tagName: "call"
+            }]
           });
 
           this.setState({
@@ -63,6 +80,7 @@ class TodoList extends Component{
           name: this.state.newTodo,
           userId: 1
         }).then(res => {
+
           let filteredItem = itemArray.filter((item) => {
             return (item.id !== this.state.editedItemid);
           });
@@ -85,19 +103,22 @@ class TodoList extends Component{
   }
 
   deleteItem(id) {
-    let itemToBeDeleted = this.state.items.filter( (item) => {
-        return (item.id === id);
-    });
-    axios.delete('http://127.0.0.1:8848/api/todos/'+itemToBeDeleted[0].id)
-    .then(res => {
-    let itemArray = this.state.items.filter( (item) => {
-      return (item.id !== id);
-    });
-
-      this.setState({
-        items: itemArray
+    if (this.state.isEditable === 1) {
+      let itemToBeDeleted = this.state.items.filter( (item) => {
+          return (item.id === id);
       });
-    }).catch(err => err);
+      axios.delete('http://127.0.0.1:8848/api/todos/'+itemToBeDeleted[0].id)
+      .then(res => {
+
+      let itemArray = this.state.items.filter( (item) => {
+        return (item.id !== id);
+      });
+
+        this.setState({
+          items: itemArray
+        });
+      }).catch(err => err);
+    }
   }
 
   editItem(id){
@@ -112,16 +133,29 @@ class TodoList extends Component{
     });
   }
 
+  tags(e){
+
+  }
+
   render() {
     return (
       <div className="todoListMain">
         <div className="header">
           <form onSubmit={this.postData}>
-            <input value={this.state.newTodo} onChange={this.handleChange} placeholder="Enter Todo"/>
+            <input className="todos" value={this.state.newTodo} onChange={this.handleChange} placeholder="Enter Todo"/>
             <button type="submit" onClick={this.postData}>{(this.state.isEditable===1)?"Add":"Edit"}</button>
+            <div>
+              <input type="checkbox" value="1" onClick={this.tags}/>call
+              <input type="checkbox" value="2" onClick={this.tags}/>clean
+              <input type="checkbox" value="3" onClick={this.tags}/>grocery
+              <input type="checkbox" value="4" onClick={this.tags}/>meeting
+              <input type="checkbox" value="5" onClick={this.tags}/>shows
+              <input type="checkbox" value="6" onClick={this.tags}/>sports
+              <input type="checkbox" value="7" onClick={this.tags}/>work
+            </div>
           </form>
         </div>
-        <TodoItems entries={this.state.items} delete={this.deleteItem} edit={this.editItem}/>
+        <TodoItems items={this.state.items} tags={this.state.tags} delete={this.deleteItem} edit={this.editItem}/>
       </div>
     )
   }
