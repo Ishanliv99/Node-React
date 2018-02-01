@@ -8,7 +8,8 @@ class TodoList extends Component{
     super();
     this.state = {
       items: [],
-      tags: [],
+      tagIds: [],
+      tagNames: [],
       newTodo: "",
       editedItemid: 0,
       isEditable: 1
@@ -34,13 +35,13 @@ class TodoList extends Component{
       });
     }).catch(err => err);
 
-    axios.get('http://127.0.0.1:8848/api/tags')
-    .then(res => {
-      // console.log(res);
-      this.setState({
-        tags: res.data.data
-      });
-    }).catch(err => err);
+    // axios.get('http://127.0.0.1:8848/api/tags')
+    // .then(res => {
+    //   // console.log(res);
+    //   this.setState({
+    //     tags: res.data.data
+    //   });
+    // }).catch(err => err);
   }
 
   postData(e) {
@@ -49,19 +50,15 @@ class TodoList extends Component{
       if (this.state.newTodo !== "") {
         axios.post('http://127.0.0.1:8848/api/todos',{
           name : this.state.newTodo,
-          // done : 'yes',
           userId: 1,
-          tags: [1,2,3]
+          tags: this.state.tagIds
         }).then(res => {
-
-          itemArray.unshift({
+          console.log(this.state.tags);
+          itemArray.push({
             name: this.state.newTodo,
             userId: 1,
             id: res.data.todoData.id,
-            tags: [{
-              id: 1,
-              tagName: "call"
-            }]
+            tags: this.state.tagNames
           });
 
           this.setState({
@@ -78,18 +75,24 @@ class TodoList extends Component{
         });
         axios.put('http://127.0.0.1:8848/api/todos/'+itemToBeEdited[0].id, {
           name: this.state.newTodo,
-          userId: 1
+          userId: 1,
+          tags: this.state.tagIds
         }).then(res => {
+
+          // console.log(this.state.tags);
 
           let filteredItem = itemArray.filter((item) => {
             return (item.id !== this.state.editedItemid);
           });
 
-          filteredItem.unshift({
+          filteredItem.push({
             name: this.state.newTodo,
             userId: 1,
-            id: res.data.data.id
+            id: res.data.data.id,
+            tags: this.state.tagNames
           });
+
+          console.log(filteredItem);
 
           this.setState({
             items: filteredItem,
@@ -134,7 +137,67 @@ class TodoList extends Component{
   }
 
   tags(e){
-
+    // console.log(this.state.tags);
+    if(e.target.checked === true){
+      if (e.target.value === "1"){
+        this.state.tagIds.push(1);
+        this.state.tagNames.push("call");
+      }
+      else if (e.target.value === "2"){
+        this.state.tagIds.push(2);
+        this.state.tagNames.push("clean");
+      }
+      else if (e.target.value === "3"){
+        this.state.tagIds.push(3);
+        this.state.tagNames.push("grocery");
+      }
+      else if (e.target.value === "4"){
+        this.state.tagIds.push(4);
+        this.state.tagNames.push("meeting");
+      }
+      else if (e.target.value === "5"){
+        this.state.tagIds.push(5);
+        this.state.tagNames.push("shows");
+      }
+      else if (e.target.value === "6"){
+        this.state.tagIds.push(6);
+        this.state.tagNames.push("sports");
+      }
+      else{
+        this.state.tagIds.push(7);
+        this.state.tagNames.push("work");
+      }
+    }
+    else {
+      if (e.target.value === "1"){
+        this.state.tagIds.splice(this.state.tagIds.indexOf(1),1);
+        this.state.tagNames.splice(this.state.tagNames.indexOf("call"),1);
+      }
+      else if (e.target.value === "2"){
+        this.state.tagIds.splice(this.state.tagIds.indexOf(2), 1);
+        this.state.tagNames.splice(this.state.tagNames.indexOf("clean"),1);
+      }
+      else if (e.target.value === "3"){
+        this.state.tagIds.splice(this.state.tagIds.indexOf(3), 1);
+        this.state.tagNames.splice(this.state.tagNames.indexOf("grocery"),1);
+      }
+      else if (e.target.value === "4"){
+        this.state.tagIds.splice(this.state.tagIds.indexOf(4), 1);
+        this.state.tagNames.splice(this.state.tagNames.indexOf("meeting"),1);
+      }
+      else if (e.target.value === "5"){
+        this.state.tagIds.splice(this.state.tagIds.indexOf(5), 1);
+        this.state.tagNames.splice(this.state.tagNames.indexOf("shows"),1);
+      }
+      else if (e.target.value === "6"){
+        this.state.tagIds.splice(this.state.tagIds.indexOf(6), 1);
+        this.state.tagNames.splice(this.state.tagNames.indexOf("sports"),1);
+      }
+      else{
+        this.state.tagIds.splice(this.state.tagIds.indexOf(7), 1);
+        this.state.tagNames.splice(this.state.tagNames.indexOf("work"),1);
+      }
+    }
   }
 
   render() {
@@ -155,7 +218,7 @@ class TodoList extends Component{
             </div>
           </form>
         </div>
-        <TodoItems items={this.state.items} tags={this.state.tags} delete={this.deleteItem} edit={this.editItem}/>
+        <TodoItems items={this.state.items} delete={this.deleteItem} edit={this.editItem}/>
       </div>
     )
   }

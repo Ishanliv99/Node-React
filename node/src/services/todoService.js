@@ -13,7 +13,7 @@ export function getAllTodos(userId, pgNum) {
 // Create new todo
 export function createTodo(todo, id) {
   let tempTag = todo.tags;
-  // console.log(tempTag);
+  // console.log(tempTag); .
   return new Todo({ name: todo.name, done: todo.done, user_id: id })
     .save()
     .then(todo => {
