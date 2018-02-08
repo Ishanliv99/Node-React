@@ -4,7 +4,6 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {getTodo} from "../actions/index";
 import axios from 'axios';
-// import GetTodo from './get-todo';
 import "../styles/TodoList.css";
 
 class TodoList extends Component{
