@@ -2,8 +2,8 @@ import { Router } from 'express';
 import * as tokenService from '../services/refreshTokenService';
 
 const router = Router();
-
 router.get('/', (req, res, next) => {
+
   console.log('-----------------');
   tokenService
     .checkRefreshToken(req.headers.authorization)

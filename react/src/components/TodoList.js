@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import TodoItems from "./TodoItems";
-import "./TodoList.css";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import {getTodo} from "../actions/index";
 import axios from 'axios';
+// import GetTodo from './get-todo';
+import "../styles/TodoList.css";
 
 class TodoList extends Component{
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
     this.state = {
       items: [],
       tagIds: [],
@@ -29,19 +34,9 @@ class TodoList extends Component{
   componentDidMount(){
     axios.get('http://127.0.0.1:8848/api/todos')
     .then(res => {
-      // console.log(res);
-      this.setState({
-        items: res.data.data
-      });
+      this.props.getTodo(res.data.data);
+      console.log('DidMount',this.props.todoList.items);
     }).catch(err => err);
-
-    // axios.get('http://127.0.0.1:8848/api/tags')
-    // .then(res => {
-    //   // console.log(res);
-    //   this.setState({
-    //     tags: res.data.data
-    //   });
-    // }).catch(err => err);
   }
 
   postData(e) {
@@ -141,31 +136,31 @@ class TodoList extends Component{
     if(e.target.checked === true){
       if (e.target.value === "1"){
         this.state.tagIds.push(1);
-        this.state.tagNames.push("call");
+        this.state.tagNames.push({tagName: "call"});
       }
       else if (e.target.value === "2"){
         this.state.tagIds.push(2);
-        this.state.tagNames.push("clean");
+        this.state.tagNames.push({tagName: "clean"});
       }
       else if (e.target.value === "3"){
         this.state.tagIds.push(3);
-        this.state.tagNames.push("grocery");
+        this.state.tagNames.push({tagName: "grocery"});
       }
       else if (e.target.value === "4"){
         this.state.tagIds.push(4);
-        this.state.tagNames.push("meeting");
+        this.state.tagNames.push({tagName: "meeting"});
       }
       else if (e.target.value === "5"){
         this.state.tagIds.push(5);
-        this.state.tagNames.push("shows");
+        this.state.tagNames.push({tagName: "shows"});
       }
       else if (e.target.value === "6"){
         this.state.tagIds.push(6);
-        this.state.tagNames.push("sports");
+        this.state.tagNames.push({tagName: "sports"});
       }
       else{
         this.state.tagIds.push(7);
-        this.state.tagNames.push("work");
+        this.state.tagNames.push({tagName: "work"});
       }
     }
     else {
@@ -218,10 +213,20 @@ class TodoList extends Component{
             </div>
           </form>
         </div>
-        <TodoItems items={this.state.items} delete={this.deleteItem} edit={this.editItem}/>
+        <TodoItems items={this.props.todoList.items} delete={this.deleteItem} edit={this.editItem}/>
+        {/* <GetTodo /> */}
       </div>
     )
   }
 }
 
-export default TodoList;
+
+let mapStatetoProps = (initialState) => {
+  return {...initialState}
+}
+
+let matchDispatchToProps = (dispatch) => {
+  return bindActionCreators({getTodo}, dispatch)
+}
+
+export default connect(mapStatetoProps, matchDispatchToProps)(TodoList);

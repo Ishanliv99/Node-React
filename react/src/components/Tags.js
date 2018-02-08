@@ -1,6 +1,7 @@
 import React from "react";
 
 const TagItem = (props) => {
+  // console.log(props.tagName);
   return (
     <li> {props.tagName} </li>
   );

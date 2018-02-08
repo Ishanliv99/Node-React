@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import Tags from './Tags';
 
 class TodoItems extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.createTasks = this.createTasks.bind(this);
   }
