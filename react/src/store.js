@@ -3,7 +3,13 @@ import allReducers from './reducers/index'
 
 export const initialState = {
   todoList: {
-    items: [],
+    items: [{
+      name: "",
+      userId: 1,
+      done: false,
+      id: 0,
+      tags: []
+    }],
     tagIds: [],
     tagNames: [],
     newTodo: "",

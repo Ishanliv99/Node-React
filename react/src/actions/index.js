@@ -5,9 +5,30 @@ export const getTodo = (response) => {
   };
 };
 
-export const postTodo = (newTodo) => {
+export const postTodo = (response) => {
   return {
     type: "POST_TODO",
-    payload: newTodo
+    payload: response
   };
 };
+
+export const handleChange = (change) => {
+  return {
+    type: "HANDLE_CHANGE",
+    payload: change
+  }
+}
+
+export const deleteTodo = (id) => {
+  return {
+    type: "DELETE_TODO",
+    payload: id
+  }
+}
+
+export const editTodo = (toggle) => {
+  return {
+    type: "EDIT_TODO",
+    payload: toggle
+  }
+}
