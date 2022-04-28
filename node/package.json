@@ -36,7 +36,7 @@
   "author": "Saugat Acharya <mesaugat@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^2.6.4",
     "babel-polyfill": "^6.23.0",
     "body-parser": "^1.17.2",
     "bookshelf": "^0.10.3",
